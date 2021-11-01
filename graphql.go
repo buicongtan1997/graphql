@@ -40,6 +40,7 @@ import (
 	"net/http"
 
 	"github.com/pkg/errors"
+	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
 // Client is a client for interacting with a GraphQL API.
@@ -145,7 +146,7 @@ func (c *Client) runWithJSON(ctx context.Context, req *Request, resp interface{}
 	}
 	if len(gr.Errors) > 0 {
 		// return first error
-		return gr.Errors[0]
+		return gr.Errors
 	}
 	return nil
 }
@@ -259,7 +260,7 @@ func (e graphErr) Error() string {
 
 type graphResponse struct {
 	Data   interface{}
-	Errors []graphErr
+	Errors gqlerror.List
 }
 
 // Request is a GraphQL request.
